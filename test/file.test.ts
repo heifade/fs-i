@@ -14,8 +14,9 @@ describe("fs", function() {
     expect(files[2]).to.be.equal('./test/path/path1/f3.txt');
   });
 
-  it("getAllDirectories", async () => {
+  it("getAllDirs", async () => {
     let dirs = await getAllDirs("./test/path");
+    console.log(1, dirs);
     expect(dirs.length).to.be.equal(3);
     expect(dirs[0]).to.be.equal('./test/path/path1');
     expect(dirs[1]).to.be.equal('./test/path/path1/path2');
