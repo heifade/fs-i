@@ -1,5 +1,5 @@
 import { readdirSync, statSync, mkdirSync, existsSync } from "fs";
-import { emptyDirSync, rmdirSync } from "fs-extra"
+import { emptyDirSync, rmdirSync } from "fs-extra";
 
 /**
  * 递归指定目录下的所有子目录，找出所有子目录
@@ -77,8 +77,10 @@ export async function mkdir(dir: string) {
     .split("/");
   paths.push("");
   paths.reduce((rv, cv, ci, array) => {
-    if (!existsSync(rv)) {
-      mkdirSync(rv);
+    if (rv) {
+      if (!existsSync(rv)) {
+        mkdirSync(rv);
+      }
     }
 
     return `${rv}/${cv}`;
@@ -87,9 +89,9 @@ export async function mkdir(dir: string) {
 
 /**
  * 删除目录及子目录
- * 
+ *
  * @export
- * @param {string} dir 
+ * @param {string} dir
  */
 export async function rmdir(dir: string) {
   emptyDirSync(dir);
