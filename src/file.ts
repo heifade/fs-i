@@ -1,4 +1,4 @@
-import { readdirSync, statSync } from "fs";
+import { readdirSync, statSync } from "fs-extra";
 
 /**
  * 递归指定目录下的所有子目录，找出所有文件

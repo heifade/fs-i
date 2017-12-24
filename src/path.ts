@@ -1,5 +1,4 @@
-import { readdirSync, statSync, mkdirSync, existsSync } from "fs";
-import { emptyDirSync, rmdirSync } from "fs-extra";
+import { emptyDirSync, rmdirSync, mkdirsSync, readdirSync, statSync, existsSync } from "fs-extra";
 
 /**
  * 递归指定目录下的所有子目录，找出所有子目录
@@ -71,18 +70,7 @@ export function getFilePath(fileName: string) {
  * @param {string} dir
  */
 export async function mkdir(dir: string) {
-  let paths = dir
-    .replace(/\\/g, "/")
-    .replace(/^\/|\/$/, "")
-    .split("/");
-  paths.push("");
-  paths.reduce((rv, cv, ci, array) => {
-    if (!existsSync(rv)) {
-      mkdirSync(rv);
-    }
-
-    return `${rv}/${cv}`;
-  });
+  mkdirsSync(dir);
 }
 
 /**
