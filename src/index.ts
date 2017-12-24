@@ -1,3 +1,3 @@
-import { getAllFiles, getAllDirs } from "./file";
+import { getAllFiles, getAllDirs, getFileName, getFilePath } from "./file";
 
-export { getAllFiles, getAllDirs };
+export { getAllFiles, getAllDirs, getFileName, getFilePath };
