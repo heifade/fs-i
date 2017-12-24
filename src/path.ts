@@ -1,4 +1,5 @@
-import { readdirSync, statSync } from "fs";
+import { readdirSync, statSync, mkdirSync, existsSync } from "fs";
+import { emptyDirSync, rmdirSync } from "fs-extra"
 
 /**
  * 递归指定目录下的所有子目录，找出所有子目录
@@ -28,10 +29,10 @@ export async function getAllDirs(path: string) {
 
 /**
  * 获取指定目录下的子目录
- * 
+ *
  * @export
  * @param {string} path - 指定目录
- * @returns 
+ * @returns
  */
 export async function getDirs(path: string) {
   path = path.replace(/\/$/, "");
@@ -61,4 +62,47 @@ export function getFilePath(fileName: string) {
   let file = (fileName || "").replace(/\\/g, "/");
   let p = file.lastIndexOf("/");
   return file.substr(0, p);
+}
+
+/**
+ * 创建目录
+ *
+ * @export
+ * @param {string} dir
+ */
+export async function mkdir(dir: string) {
+  let paths = dir
+    .replace(/\\/g, "/")
+    .replace(/\/$/, "")
+    .split("/");
+  paths.push("");
+  paths.reduce((rv, cv, ci, array) => {
+    if (!existsSync(rv)) {
+      mkdirSync(rv);
+    }
+
+    return `${rv}/${cv}`;
+  });
+}
+
+/**
+ * 删除目录及子目录
+ * 
+ * @export
+ * @param {string} dir 
+ */
+export async function rmdir(dir: string) {
+  emptyDirSync(dir);
+  rmdirSync(dir);
+}
+
+/**
+ * 文件/目录是否存在
+ *
+ * @export
+ * @param {string} dir
+ * @returns
+ */
+export async function exists(dir: string) {
+  return existsSync(dir);
 }
