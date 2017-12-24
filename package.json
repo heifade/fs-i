@@ -1,6 +1,6 @@
 {
   "name": "fs-i",
-  "version": "1.0.0-beta8",
+  "version": "1.0.0-beta9",
   "description": "file tools",
   "main": "./es/index.js",
   "module": "./es/index.js",
