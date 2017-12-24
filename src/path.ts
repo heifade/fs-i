@@ -73,14 +73,12 @@ export function getFilePath(fileName: string) {
 export async function mkdir(dir: string) {
   let paths = dir
     .replace(/\\/g, "/")
-    .replace(/\/$/, "")
+    .replace(/^\/|\/$/, "")
     .split("/");
   paths.push("");
   paths.reduce((rv, cv, ci, array) => {
-    if (rv) {
-      if (!existsSync(rv)) {
-        mkdirSync(rv);
-      }
+    if (!existsSync(rv)) {
+      mkdirSync(rv);
     }
 
     return `${rv}/${cv}`;

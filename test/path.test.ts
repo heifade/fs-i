@@ -39,8 +39,6 @@ describe("fs", function() {
 
     await mkdir(mkdirPath);
 
-    await mkdir("");
-
     expect(await exists(mkdirPath)).to.be.true;
   });
 
