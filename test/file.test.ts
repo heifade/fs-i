@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { getAllFiles, getFileName, getFiles } from "../src/index";
+import { getAllFiles, getFileName, getFiles, readFileUtf8 } from "../src/index";
 import "mocha";
 
 describe("fs", function() {
@@ -23,10 +23,6 @@ describe("fs", function() {
     expect(files[1]).to.be.equal("./test/path/file2.txt");
   });
 
-  
-
-  
-
   it("getFileName", async () => {
     let fileName = getFileName("c:/a/b/c.txt");
     expect(fileName).to.be.equal("c.txt");
@@ -38,5 +34,7 @@ describe("fs", function() {
     expect(fileName).to.be.equal("");
   });
 
-  
+  it("readFileUtf8", async () => {
+    expect(await readFileUtf8("./test/path/file1.txt")).to.be.equal("1");
+  });
 });
