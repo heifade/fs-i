@@ -69,7 +69,7 @@ export function getFilePath(fileName: string) {
  * @export
  * @param {string} dir
  */
-export async function mkdir(dir: string) {
+export async function mkdirs(dir: string) {
   if (!existsSync(dir)) {
     mkdirsSync(dir);
   }

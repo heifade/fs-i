@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { getAllDirs, getFilePath, getDirs, exists, mkdir, rmdir } from "../src/index";
+import { getAllDirs, getFilePath, getDirs, exists, mkdirs, rmdir } from "../src/index";
 import "mocha";
 
 describe("fs", function() {
@@ -34,11 +34,11 @@ describe("fs", function() {
     expect(fileName).to.be.equal("");
   });
 
-  it("mkdir", async () => {
+  it("mkdirs", async () => {
     expect(await exists(mkdirPath)).to.be.false;
 
-    await mkdir(mkdirPath);
-    await mkdir(mkdirPath);
+    await mkdirs(mkdirPath);
+    await mkdirs(mkdirPath);
 
     expect(await exists(mkdirPath)).to.be.true;
   });
