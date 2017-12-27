@@ -1,4 +1,4 @@
-import { emptyDirSync, rmdirSync, mkdirsSync, readdirSync, statSync, existsSync } from "fs-extra";
+import { emptyDirSync, rmdirSync as fsExtRmdirSync, mkdirsSync as fsExtMkdirsSync, readdirSync, statSync, existsSync as fsExtExistsSync } from "fs-extra";
 
 /**
  * 递归指定目录下的所有子目录，找出所有子目录
@@ -8,6 +8,17 @@ import { emptyDirSync, rmdirSync, mkdirsSync, readdirSync, statSync, existsSync 
  * @returns
  */
 export async function getAllDirs(path: string) {
+  return getAllDirsSync(path);
+}
+
+/**
+ * 递归指定目录下的所有子目录，找出所有子目录,(同步)
+ *
+ * @export
+ * @param {string} path - 指定目录
+ * @returns
+ */
+export function getAllDirsSync(path: string) {
   path = path.replace(/\/$/, "");
   let files = readdirSync(path);
 
@@ -19,7 +30,7 @@ export async function getAllDirs(path: string) {
     if (statSync(fileFullName).isDirectory()) {
       fileList.push(`${fileFullName}`);
 
-      fileList = fileList.concat(await getAllDirs(`${fileFullName}/`));
+      fileList = fileList.concat(getAllDirsSync(`${fileFullName}/`));
     }
   }
 
@@ -34,6 +45,17 @@ export async function getAllDirs(path: string) {
  * @returns
  */
 export async function getDirs(path: string) {
+  return getDirsSync(path);
+}
+
+/**
+ * 获取指定目录下的子目录,(同步)
+ *
+ * @export
+ * @param {string} path - 指定目录
+ * @returns
+ */
+export function getDirsSync(path: string) {
   path = path.replace(/\/$/, "");
   let files = readdirSync(path);
 
@@ -70,8 +92,18 @@ export function getFilePath(fileName: string) {
  * @param {string} dir
  */
 export async function mkdirs(dir: string) {
+  mkdirsSync(dir);
+}
+
+/**
+ * 创建目录,（同步）
+ *
+ * @export
+ * @param {string} dir
+ */
+export function mkdirsSync(dir: string) {
   if (!existsSync(dir)) {
-    mkdirsSync(dir);
+    fsExtMkdirsSync(dir);
   }
 }
 
@@ -82,8 +114,18 @@ export async function mkdirs(dir: string) {
  * @param {string} dir
  */
 export async function rmdir(dir: string) {
-  emptyDirSync(dir);
   rmdirSync(dir);
+}
+
+/**
+ * 删除目录及子目录,(同步)
+ *
+ * @export
+ * @param {string} dir
+ */
+export function rmdirSync(dir: string) {
+  emptyDirSync(dir);
+  fsExtRmdirSync(dir);
 }
 
 /**
@@ -95,4 +137,15 @@ export async function rmdir(dir: string) {
  */
 export async function exists(dir: string) {
   return existsSync(dir);
+}
+
+/**
+ * 文件/目录是否存在,(同步)
+ *
+ * @export
+ * @param {string} dir
+ * @returns
+ */
+export function existsSync(dir: string) {
+  return fsExtExistsSync(dir);
 }

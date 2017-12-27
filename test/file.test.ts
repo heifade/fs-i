@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { getAllFiles, getFileName, getFiles, readFileUtf8 } from "../src/index";
+import { getAllFiles, getAllFilesSync, getFileName, getFiles, getFilesSync, readFileUtf8, readFileUtf8Sync } from "../src/index";
 import "mocha";
 
 describe("fs", function() {
@@ -16,8 +16,25 @@ describe("fs", function() {
     expect(files[4]).to.be.equal("./test/path/path2/file21.txt");
   });
 
+  it("getAllFilesSync", async () => {
+    let files = getAllFilesSync("./test/path");
+    expect(files.length).to.be.equal(5);
+    expect(files[0]).to.be.equal("./test/path/file1.txt");
+    expect(files[1]).to.be.equal("./test/path/file2.txt");
+    expect(files[2]).to.be.equal("./test/path/path1/file11.txt");
+    expect(files[3]).to.be.equal("./test/path/path1/path11/file111.txt");
+    expect(files[4]).to.be.equal("./test/path/path2/file21.txt");
+  });
+
   it("getFiles", async () => {
     let files = await getFiles("./test/path");
+    expect(files.length).to.be.equal(2);
+    expect(files[0]).to.be.equal("./test/path/file1.txt");
+    expect(files[1]).to.be.equal("./test/path/file2.txt");
+  });
+
+  it("getFilesSync", async () => {
+    let files = getFilesSync("./test/path");
     expect(files.length).to.be.equal(2);
     expect(files[0]).to.be.equal("./test/path/file1.txt");
     expect(files[1]).to.be.equal("./test/path/file2.txt");
@@ -37,4 +54,10 @@ describe("fs", function() {
   it("readFileUtf8", async () => {
     expect(await readFileUtf8("./test/path/file1.txt")).to.be.equal("1");
   });
+
+  it("readFileUtf8Sync", async () => {
+    expect(readFileUtf8Sync("./test/path/file1.txt")).to.be.equal("1");
+  });
+
+  
 });

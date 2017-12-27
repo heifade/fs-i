@@ -8,6 +8,17 @@ import { readdirSync, statSync, readFileSync } from "fs-extra";
  * @returns
  */
 export async function getAllFiles(path: string) {
+  return getAllFilesSync(path);
+}
+
+/**
+ * 递归指定目录下的所有子目录，找出所有文件，(同步)
+ *
+ * @export
+ * @param {string} path - 指定目录
+ * @returns
+ */
+export function getAllFilesSync(path: string) {
   path = path.replace(/\/$/, "");
   let files = readdirSync(path);
 
@@ -17,7 +28,7 @@ export async function getAllFiles(path: string) {
     let fileFullName = `${path}/${file}`;
 
     if (statSync(fileFullName).isDirectory()) {
-      fileList = fileList.concat(await getAllFiles(`${fileFullName}/`));
+      fileList = fileList.concat(getAllFilesSync(`${fileFullName}/`));
     } else {
       fileList.push(`${fileFullName}`);
     }
@@ -34,6 +45,17 @@ export async function getAllFiles(path: string) {
  * @returns
  */
 export async function getFiles(path: string) {
+  return getFilesSync(path);
+}
+
+/**
+ * 获取指定目录下的文件,(同步)
+ *
+ * @export
+ * @param {string} path - 指定目录
+ * @returns
+ */
+export function getFilesSync(path: string) {
   path = path.replace(/\/$/, "");
   let files = readdirSync(path);
 
@@ -65,11 +87,22 @@ export function getFileName(fileName: string) {
 
 /**
  * 以utf8编码读取文件
- * 
+ *
  * @export
- * @param {string} fileName 
- * @returns 
+ * @param {string} fileName
+ * @returns
  */
 export async function readFileUtf8(fileName: string) {
+  return readFileUtf8Sync(fileName);
+}
+
+/**
+ * 以utf8编码读取文件,(同步)
+ *
+ * @export
+ * @param {string} fileName
+ * @returns
+ */
+export function readFileUtf8Sync(fileName: string) {
   return readFileSync(fileName, { encoding: "utf-8" });
 }
