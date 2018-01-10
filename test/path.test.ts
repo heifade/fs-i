@@ -1,10 +1,11 @@
 import { expect } from "chai";
-import { getAllDirs, getAllDirsSync, getFilePath, getDirs, getDirsSync, exists, existsSync, mkdirs, mkdirsSync, rmdir, rmdirSync } from "../src/index";
+import { getAllDirs, getAllDirsSync, getFilePath, getDirs, getDirsSync, exists, existsSync, mkdirs, mkdirsSync, mkdir, mkdirSync, rmdir, rmdirSync } from "../src/index";
 import "mocha";
+import { saveFileUtf8Sync } from "../src/file";
 
-describe("fs", function() {
+describe("path", function() {
   let mkdirRootPath = `./${Math.random()}`;
-  let mkdirPath = `${mkdirRootPath}/${Math.random()}/${Math.random()}/${Math.random()}`;
+  let mkdirPath = `${mkdirRootPath}/${Math.random()}/${Math.random()}/${Math.random()}/${Math.random()}/${Math.random()}`;
   before(() => {});
   after(() => {});
 
@@ -49,27 +50,80 @@ describe("fs", function() {
   });
 
   it("mkdirs", async () => {
+    expect(await exists(mkdirRootPath)).to.be.false;
     expect(await exists(mkdirPath)).to.be.false;
 
     await mkdirs(mkdirPath);
     await mkdirs(mkdirPath);
 
+    addFiles(mkdirPath);
+
     expect(await exists(mkdirPath)).to.be.true;
+    expect(await exists(mkdirRootPath)).to.be.true;
+
+    rmdirSync(mkdirRootPath);
+    expect(await exists(mkdirPath)).to.be.false;
+    expect(await exists(mkdirRootPath)).to.be.false;
   });
 
   it("mkdirsSync", async () => {
-    expect(existsSync(mkdirPath)).to.be.true;
-    rmdirSync(mkdirPath);
-
+    expect(await exists(mkdirRootPath)).to.be.false;
     expect(existsSync(mkdirPath)).to.be.false;
 
     mkdirsSync(mkdirPath);
-    mkdirsSync(mkdirPath);
+    mkdirsSync(mkdirPath); //这个操作多余，只为了测试
+
+    addFiles(mkdirPath);
 
     expect(existsSync(mkdirPath)).to.be.true;
+    expect(await exists(mkdirRootPath)).to.be.true;
+    rmdirSync(mkdirRootPath);
+    expect(existsSync(mkdirPath)).to.be.false;
+    expect(await exists(mkdirRootPath)).to.be.false;
+  });
+
+  it("mkdir", async () => {
+    expect(await exists(mkdirRootPath)).to.be.false;
+
+    await mkdir(mkdirRootPath);
+    await mkdir(mkdirRootPath);
+
+    expect(await exists(mkdirRootPath)).to.be.true;
+
+    rmdirSync(mkdirRootPath);
+    rmdirSync(mkdirRootPath); // 多余操作，为了测试
+    expect(await exists(mkdirRootPath)).to.be.false;
+  });
+
+  it("mkdirSync", async () => {
+    expect(await exists(mkdirRootPath)).to.be.false;
+
+    await mkdir(mkdirRootPath);
+    await mkdir(mkdirRootPath);
+
+    expect(await exists(mkdirRootPath)).to.be.true;
+
+    rmdirSync(mkdirRootPath);
+    rmdirSync(mkdirRootPath); // 多余操作，为了测试
+    expect(await exists(mkdirRootPath)).to.be.false;
+  });
+
+  it("mkdirsSync with error", async () => {
+    try {
+      mkdirsSync("");
+      expect(true).to.be.false; //进入这里就有问题了
+    } catch (e) {
+      expect(e.message).to.be.equal("path can not be empty!");
+    }
   });
 
   it("rmdir", async () => {
+    expect(await exists(mkdirRootPath)).to.be.false;
+    expect(await exists(mkdirPath)).to.be.false;
+
+    await mkdirs(mkdirPath);
+    await mkdirs(mkdirPath); //这个操作多余，只为了测试
+
     expect(await exists(mkdirRootPath)).to.be.true;
     expect(await exists(mkdirPath)).to.be.true;
 
@@ -84,6 +138,7 @@ describe("fs", function() {
     expect(existsSync(mkdirRootPath)).to.be.false;
 
     mkdirsSync(mkdirPath);
+    mkdirsSync(mkdirPath); //这个操作多余，只为了测试
 
     expect(existsSync(mkdirRootPath)).to.be.true;
     expect(existsSync(mkdirPath)).to.be.true;
@@ -94,3 +149,29 @@ describe("fs", function() {
     expect(existsSync(mkdirRootPath)).to.be.false;
   });
 });
+
+function addFiles(dir: string) {
+  saveFileUtf8Sync(`${dir}/file1.txt`, "111");
+
+  dir = dir.substr(0, dir.lastIndexOf("/"));
+  saveFileUtf8Sync(`${dir}/file1.txt`, "111");
+  saveFileUtf8Sync(`${dir}/file2.txt`, "111");
+
+  dir = dir.substr(0, dir.lastIndexOf("/"));
+  saveFileUtf8Sync(`${dir}/file1.txt`, "111");
+  saveFileUtf8Sync(`${dir}/file2.txt`, "111");
+  saveFileUtf8Sync(`${dir}/file3.txt`, "111");
+
+  dir = dir.substr(0, dir.lastIndexOf("/"));
+  saveFileUtf8Sync(`${dir}/file1.txt`, "111");
+  saveFileUtf8Sync(`${dir}/file2.txt`, "111");
+  saveFileUtf8Sync(`${dir}/file3.txt`, "111");
+  saveFileUtf8Sync(`${dir}/file4.txt`, "111");
+
+  dir = dir.substr(0, dir.lastIndexOf("/"));
+  saveFileUtf8Sync(`${dir}/file1.txt`, "111");
+  saveFileUtf8Sync(`${dir}/file2.txt`, "111");
+  saveFileUtf8Sync(`${dir}/file3.txt`, "111");
+  saveFileUtf8Sync(`${dir}/file4.txt`, "111");
+  saveFileUtf8Sync(`${dir}/file5.txt`, "111");
+}

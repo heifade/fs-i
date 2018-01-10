@@ -1,4 +1,5 @@
-import { emptyDirSync, rmdirSync as fsExtRmdirSync, mkdirsSync as fsExtMkdirsSync, readdirSync, statSync, existsSync as fsExtExistsSync } from "fs-extra";
+import { rmdirSync as fsRmdirSync, readdirSync, statSync, existsSync as fsExistsSync, mkdirSync as fsMkdirSync, unlinkSync } from "fs";
+import { join as pathJoin, dirname as pathDirname } from "path";
 
 /**
  * 递归指定目录下的所有子目录，找出所有子目录
@@ -102,8 +103,36 @@ export async function mkdirs(dir: string) {
  * @param {string} dir
  */
 export function mkdirsSync(dir: string) {
+  if (!dir) {
+    throw new Error(`path can not be empty!`);
+  }
+
   if (!existsSync(dir)) {
-    fsExtMkdirsSync(dir);
+    dir = dir.replace(/\\/g, "/");
+    mkdirsSync(pathDirname(dir));
+    mkdirSync(dir);
+  }
+}
+
+/**
+ * 创建目录
+ *
+ * @export
+ * @param {string} dir
+ */
+export async function mkdir(dir: string) {
+  await mkdirSync(dir);
+}
+
+/**
+ * 创建目录,（同步）
+ *
+ * @export
+ * @param {string} dir
+ */
+export function mkdirSync(dir: string) {
+  if (!existsSync(dir)) {
+    fsMkdirSync(dir);
   }
 }
 
@@ -114,7 +143,7 @@ export function mkdirsSync(dir: string) {
  * @param {string} dir
  */
 export async function rmdir(dir: string) {
-  rmdirSync(dir);
+  await rmdirSync(dir);
 }
 
 /**
@@ -124,8 +153,18 @@ export async function rmdir(dir: string) {
  * @param {string} dir
  */
 export function rmdirSync(dir: string) {
-  emptyDirSync(dir);
-  fsExtRmdirSync(dir);
+  if (existsSync(dir)) {
+    readdirSync(dir).forEach(file => {
+      let fullFile = pathJoin(dir, file);
+      if (statSync(fullFile).isDirectory()) {
+        rmdirSync(fullFile);
+      } else {
+        unlinkSync(fullFile);
+      }
+    });
+
+    fsRmdirSync(dir);
+  }
 }
 
 /**
@@ -147,5 +186,5 @@ export async function exists(dir: string) {
  * @returns
  */
 export function existsSync(dir: string) {
-  return fsExtExistsSync(dir);
+  return fsExistsSync(dir);
 }

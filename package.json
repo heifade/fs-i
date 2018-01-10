@@ -1,6 +1,6 @@
 {
   "name": "fs-i",
-  "version": "1.0.5",
+  "version": "1.1.1",
   "description": "file tools",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -45,7 +45,5 @@
     "typedoc-format": "^1.0.2",
     "typescript": "^2.5.3"
   },
-  "dependencies": {
-    "fs-extra": "^5.0.0"
-  }
+  "dependencies": {}
 }

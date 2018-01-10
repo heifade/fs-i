@@ -1,8 +1,10 @@
 import { expect } from "chai";
-import { getAllFiles, getAllFilesSync, getFileName, getFiles, getFilesSync, readFileUtf8, readFileUtf8Sync } from "../src/index";
+import { getAllFiles, getAllFilesSync, getFileName, getFiles, getFilesSync, readFileUtf8, readFileUtf8Sync, saveFileUtf8Sync, saveFileUtf8 } from "../src/index";
 import "mocha";
+import { deleteFileSync, deleteFile } from "../src/file";
+import { existsSync } from "../src/path";
 
-describe("fs", function() {
+describe("file", function() {
   before(() => {});
   after(() => {});
 
@@ -59,5 +61,22 @@ describe("fs", function() {
     expect(readFileUtf8Sync("./test/path/file1.txt")).to.be.equal("1");
   });
 
-  
+  it("saveFileUtf8Sync", async () => {
+    let file = `./test/path/${Math.random()}.txt`;
+    saveFileUtf8Sync(file, "111");
+    expect(existsSync(file)).to.be.true;
+    expect(readFileUtf8Sync(file)).to.be.equal("111");
+    deleteFileSync(file);
+    deleteFileSync(file);
+    expect(existsSync(file)).to.be.false;
+  });
+
+  it("saveFileUtf8", async () => {
+    let file = `./test/path/${Math.random()}.txt`;
+    await saveFileUtf8(file, "111");
+    expect(existsSync(file)).to.be.true;
+    expect(readFileUtf8Sync(file)).to.be.equal("111");
+    await deleteFile(file);
+    expect(existsSync(file)).to.be.false;
+  });
 });

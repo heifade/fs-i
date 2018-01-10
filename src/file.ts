@@ -1,4 +1,4 @@
-import { readdirSync, statSync, readFileSync } from "fs-extra";
+import { readdirSync, statSync, readFileSync, writeFileSync, unlinkSync, existsSync } from "fs";
 
 /**
  * 递归指定目录下的所有子目录，找出所有文件
@@ -105,4 +105,48 @@ export async function readFileUtf8(fileName: string) {
  */
 export function readFileUtf8Sync(fileName: string) {
   return readFileSync(fileName, { encoding: "utf-8" });
+}
+
+/**
+ * 以utf8编码保存文件
+ *
+ * @export
+ * @param {string} fileName
+ * @param {string} content
+ */
+export async function saveFileUtf8(fileName: string, content: string) {
+  await writeFileSync(fileName, content, { encoding: "utf-8" });
+}
+
+/**
+ * 以utf8编码读取文件,(同步)
+ *
+ * @export
+ * @param {string} fileName
+ * @param {string} content
+ */
+export function saveFileUtf8Sync(fileName: string, content: string) {
+  writeFileSync(fileName, content, { encoding: "utf-8" });
+}
+
+/**
+ * 删除文件
+ * 
+ * @export
+ * @param {string} fileName 
+ */
+export async function deleteFile(fileName: string) {
+  await deleteFileSync(fileName);
+}
+
+/**
+ * 删除文件，(同步)
+ * 
+ * @export
+ * @param {string} fileName 
+ */
+export function deleteFileSync(fileName: string) {
+  if (existsSync(fileName)) {
+    unlinkSync(fileName);
+  }
 }
