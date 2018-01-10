@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { getAllFiles, getAllFilesSync, getFileName, getFiles, getFilesSync, readFileUtf8, readFileUtf8Sync, saveFileUtf8Sync, saveFileUtf8 } from "../src/index";
+import { getAllFiles, getAllFilesSync, getFileName, getFiles, getFilesSync, readFileUtf8, readFileUtf8Sync, saveFileUtf8Sync, saveFileUtf8, renameSync } from "../src/index";
 import "mocha";
 import { deleteFileSync, deleteFile } from "../src/file";
 import { existsSync } from "../src/path";
@@ -78,5 +78,28 @@ describe("file", function() {
     expect(readFileUtf8Sync(file)).to.be.equal("111");
     await deleteFile(file);
     expect(existsSync(file)).to.be.false;
+  });
+
+  it("renameSync", async () => {
+    let file1 = `./test/path/${Math.random()}.txt`;
+    let file2 = `./test/path/${Math.random()}.txt`;
+
+    expect(existsSync(file1)).to.be.false;
+    expect(existsSync(file2)).to.be.false;
+
+    await saveFileUtf8(file1, "111");
+    expect(existsSync(file1)).to.be.true;
+    expect(existsSync(file2)).to.be.false;
+
+    renameSync(file1, file2);
+
+    expect(existsSync(file1)).to.be.false;
+    expect(existsSync(file2)).to.be.true;
+
+    deleteFileSync(file2);
+
+    expect(existsSync(file1)).to.be.false;
+    expect(existsSync(file2)).to.be.false;
+
   });
 });

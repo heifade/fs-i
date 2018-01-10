@@ -1,4 +1,4 @@
-import { readdirSync, statSync, readFileSync, writeFileSync, unlinkSync, existsSync } from "fs";
+import { readdirSync, statSync, readFileSync, writeFileSync, unlinkSync, existsSync, renameSync as fsRenameSync } from "fs";
 
 /**
  * 递归指定目录下的所有子目录，找出所有文件
@@ -149,4 +149,15 @@ export function deleteFileSync(fileName: string) {
   if (existsSync(fileName)) {
     unlinkSync(fileName);
   }
+}
+
+/**
+ * 更改名称
+ * 
+ * @export
+ * @param {string} oldName 
+ * @param {string} newName 
+ */
+export function renameSync(oldName: string, newName: string) {
+  fsRenameSync(oldName, newName);
 }
