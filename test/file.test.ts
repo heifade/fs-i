@@ -1,8 +1,6 @@
 import { expect } from "chai";
-import { getAllFiles, getAllFilesSync, getFileName, getFiles, getFilesSync, readFileUtf8, readFileUtf8Sync, saveFileUtf8Sync, saveFileUtf8, renameSync } from "../src/index";
+import { getAllFiles, getAllFilesSync, getFileName, getFiles, getFilesSync, readFileUtf8, readFileUtf8Sync, saveFileUtf8Sync, saveFileUtf8, renameSync, deleteFileSync, deleteFile, existsSync } from "../src/index";
 import "mocha";
-import { deleteFileSync, deleteFile } from "../src/file";
-import { existsSync } from "../src/path";
 
 describe("file", function() {
   before(() => {});
@@ -100,6 +98,5 @@ describe("file", function() {
 
     expect(existsSync(file1)).to.be.false;
     expect(existsSync(file2)).to.be.false;
-
   });
 });

@@ -1,8 +1,27 @@
 import { expect } from "chai";
-import { getAllDirs, getAllDirsSync, getFilePath, getDirs, getDirsSync, exists, existsSync, mkdirs, mkdirsSync, mkdir, mkdirSync, rmdir, rmdirSync, readFileUtf8Sync, copy } from "../src/index";
+import {
+  getAllDirs,
+  getAllDirsSync,
+  getFilePath,
+  getDirs,
+  getDirsSync,
+  exists,
+  existsSync,
+  mkdirs,
+  mkdirsSync,
+  mkdir,
+  mkdirSync,
+  rmdir,
+  rmdirSync,
+  readFileUtf8Sync,
+  copy,
+  saveFileUtf8Sync,
+  deleteFileSync,
+  isFile,
+  copySync,
+  isDirectory
+} from "../src/index";
 import "mocha";
-import { saveFileUtf8Sync, deleteFileSync, isFile } from "../src/file";
-import { copySync, isDirectory } from "../src/path";
 
 describe("path", function() {
   let mkdirRootPath = `./${Math.random()}`;
