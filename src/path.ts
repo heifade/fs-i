@@ -1,5 +1,6 @@
-import { rmdirSync as fsRmdirSync, readdirSync, statSync, existsSync as fsExistsSync, mkdirSync as fsMkdirSync, unlinkSync } from "fs";
+import { rmdirSync as fsRmdirSync, readdirSync, statSync, existsSync as fsExistsSync, mkdirSync as fsMkdirSync, unlinkSync, copyFileSync } from "fs";
 import { join as pathJoin, dirname as pathDirname } from "path";
+import { deleteFileSync, deleteFile, isFile } from "./file";
 
 /**
  * 递归指定目录下的所有子目录，找出所有子目录
@@ -28,7 +29,7 @@ export function getAllDirsSync(path: string) {
   for (let file of files) {
     let fileFullName = `${path}/${file}`;
 
-    if (statSync(fileFullName).isDirectory()) {
+    if (isDirectory(fileFullName)) {
       fileList.push(`${fileFullName}`);
 
       fileList = fileList.concat(getAllDirsSync(`${fileFullName}/`));
@@ -65,7 +66,7 @@ export function getDirsSync(path: string) {
   for (let file of files) {
     let fileFullName = `${path}/${file}`;
 
-    if (statSync(fileFullName).isDirectory()) {
+    if (isDirectory(fileFullName)) {
       fileList.push(`${fileFullName}`);
     }
   }
@@ -156,7 +157,7 @@ export function rmdirSync(dir: string) {
   if (existsSync(dir)) {
     readdirSync(dir).forEach(file => {
       let fullFile = pathJoin(dir, file);
-      if (statSync(fullFile).isDirectory()) {
+      if (isDirectory(fullFile)) {
         rmdirSync(fullFile);
       } else {
         unlinkSync(fullFile);
@@ -187,4 +188,85 @@ export async function exists(dir: string) {
  */
 export function existsSync(dir: string) {
   return fsExistsSync(dir);
+}
+
+/**
+ * 复制目录
+ *
+ * @export
+ * @param {string} sourceDir - 源目录
+ * @param {string} targetDir - 目标目录
+ * @param {{ overwrite: boolean }} options
+ */
+export async function copy(sourceDir: string, targetDir: string, options: { overwrite: boolean }) {
+  await copySync(sourceDir, targetDir, options);
+}
+
+/**
+ * 复制目录，(同步)
+ *
+ * @export
+ * @param {string} sourceDir - 源目录
+ * @param {string} targetDir - 目标目录
+ * @param {{ overwrite: boolean }} options
+ */
+export function copySync(sourceDir: string, targetDir: string, options?: { overwrite: boolean }) {
+  if (existsSync(sourceDir)) {
+    if (isDirectory(sourceDir)) {
+      // 源是目录
+      if (existsSync(targetDir)) {
+        if (isFile(targetDir)) {
+          if (options && options.overwrite) {
+            deleteFileSync(targetDir);
+            mkdirSync(targetDir);
+          } else {
+            return;
+          }
+        }
+      } else {
+        mkdirSync(targetDir);
+      }
+
+      readdirSync(sourceDir).forEach(file => {
+        let sourceFullName = pathJoin(sourceDir, file);
+        let targetFullName = pathJoin(targetDir, file);
+
+        copySync(sourceFullName, targetFullName, options);
+      });
+    } else {
+      // 源是文件
+      if (existsSync(targetDir)) {
+        if (isDirectory(targetDir)) {
+          // 目标存在且是目录
+          if (options && options.overwrite) {
+            rmdirSync(targetDir);
+          } else {
+            return;
+          }
+        } else {
+          // 目标存在且是文件
+          if (options && options.overwrite) {
+            deleteFileSync(targetDir);
+          } else {
+            return;
+          }
+        }
+      }
+      // 目标不存在
+      copyFileSync(sourceDir, targetDir);
+    }
+  } else {
+    throw new Error(`${sourceDir} is not exists!`);
+  }
+}
+
+/**
+ * 是否是目录
+ *
+ * @export
+ * @param {string} dir
+ * @returns
+ */
+export function isDirectory(dir: string) {
+  return statSync(dir).isDirectory();
 }

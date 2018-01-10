@@ -1,7 +1,8 @@
 import { expect } from "chai";
-import { getAllDirs, getAllDirsSync, getFilePath, getDirs, getDirsSync, exists, existsSync, mkdirs, mkdirsSync, mkdir, mkdirSync, rmdir, rmdirSync } from "../src/index";
+import { getAllDirs, getAllDirsSync, getFilePath, getDirs, getDirsSync, exists, existsSync, mkdirs, mkdirsSync, mkdir, mkdirSync, rmdir, rmdirSync, readFileUtf8Sync, copy } from "../src/index";
 import "mocha";
-import { saveFileUtf8Sync } from "../src/file";
+import { saveFileUtf8Sync, deleteFileSync, isFile } from "../src/file";
+import { copySync, isDirectory } from "../src/path";
 
 describe("path", function() {
   let mkdirRootPath = `./${Math.random()}`;
@@ -148,6 +149,115 @@ describe("path", function() {
     expect(existsSync(mkdirPath)).to.be.false;
     expect(existsSync(mkdirRootPath)).to.be.false;
   });
+
+  it("copySync", async () => {
+    let path1 = "./test/path";
+    let path2 = "./test/path2";
+
+    expect(existsSync(path1)).to.be.true;
+    expect(existsSync(path2)).to.be.false;
+
+    copySync(path1, path2, { overwrite: true });
+
+    expect(existsSync(path1)).to.be.true;
+    expect(existsSync(path2)).to.be.true;
+
+    let file1 = `${path1}/path1/path11/file112.txt`;
+    let file2 = `${path2}/path1/path11/file112.txt`;
+    saveFileUtf8Sync(file1, "111");
+
+    expect(existsSync(file1)).to.be.true;
+
+    expect(existsSync(file2)).to.be.false;
+
+    copySync(path1, path2, { overwrite: true });
+
+    expect(existsSync(file2)).to.be.true;
+
+    expect(readFileUtf8Sync(file2)).to.be.equal("111");
+
+    saveFileUtf8Sync(file1, "11122");
+
+    copySync(path1, path2, { overwrite: true });
+
+    expect(readFileUtf8Sync(file2)).to.be.equal("11122");
+
+    saveFileUtf8Sync(file1, "1112233");
+    copySync(path1, path2, { overwrite: false });
+    copySync(path1, path2);
+    expect(readFileUtf8Sync(file2)).to.be.equal("11122");
+
+    let file21 = `${path1}/path1/path11/file113.txt`;
+    let file22 = `${path2}/path1/path11/file113.txt`;
+
+    saveFileUtf8Sync(file21, "123"); // 源是文件
+    mkdirSync(file22); // 目标是目录
+    expect(existsSync(file22) && isDirectory(file22)).to.be.true;
+    copySync(path1, path2, { overwrite: true });
+    expect(existsSync(file22) && isFile(file22)).to.be.true;
+    deleteFileSync(file22);
+    deleteFileSync(file21);
+
+    saveFileUtf8Sync(file21, "123"); // 源是文件
+    mkdirSync(file22); // 目标是目录
+    expect(existsSync(file22) && isDirectory(file22)).to.be.true;
+    copySync(path1, path2);
+    expect(existsSync(file22) && isDirectory(file22)).to.be.true;
+    rmdirSync(file22);
+    deleteFileSync(file21);
+
+    mkdirSync(file21); // 源是目录
+    saveFileUtf8Sync(file22, "123"); // 目标是文件
+    expect(existsSync(file22) && isFile(file22)).to.be.true;
+    copySync(path1, path2, { overwrite: true });
+    expect(existsSync(file22) && isDirectory(file22)).to.be.true;
+    rmdirSync(file21);
+    rmdirSync(file22);
+
+    mkdirSync(file21); // 源是目录
+    saveFileUtf8Sync(file22, "123"); // 目标是文件
+    expect(existsSync(file22) && isFile(file22)).to.be.true;
+    copySync(path1, path2);
+    expect(existsSync(file22) && isFile(file22)).to.be.true;
+    rmdirSync(file21);
+
+    rmdirSync(path2);
+    expect(existsSync(path2)).to.be.false;
+
+    deleteFileSync(file1);
+    expect(existsSync(file1)).to.be.false;
+  });
+});
+
+it("copy", async () => {
+  let path1 = "./test/path";
+  let path2 = "./test/path2";
+
+  expect(existsSync(path1)).to.be.true;
+  expect(existsSync(path2)).to.be.false;
+
+  await copy(path1, path2, { overwrite: true });
+
+  expect(existsSync(path1)).to.be.true;
+  expect(existsSync(path2)).to.be.true;
+
+  rmdirSync(path2);
+  expect(existsSync(path2)).to.be.false;
+});
+
+it("copySync with error", async () => {
+  let path1 = "./test/path555";
+  let path2 = "./test/path2";
+
+  expect(existsSync(path1)).to.be.false;
+  expect(existsSync(path2)).to.be.false;
+
+  try {
+    copySync(path1, path2, { overwrite: true });
+    expect(true).to.be.false; // 进入这里就有问题了
+  } catch (e) {
+    expect((e.message || "").endsWith(" is not exists!")).to.be.true;
+  }
 });
 
 function addFiles(dir: string) {

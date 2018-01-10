@@ -1,5 +1,5 @@
-import { getAllFiles, getAllFilesSync, getFileName, getFiles, getFilesSync, readFileUtf8, readFileUtf8Sync, saveFileUtf8, saveFileUtf8Sync, deleteFile, deleteFileSync, renameSync } from "./file";
-import { getAllDirs, getAllDirsSync, getFilePath, getDirs, getDirsSync, exists, existsSync, mkdirs, mkdirsSync, rmdir, rmdirSync, mkdir, mkdirSync } from "./path";
+import { getAllFiles, getAllFilesSync, getFileName, getFiles, getFilesSync, readFileUtf8, readFileUtf8Sync, saveFileUtf8, saveFileUtf8Sync, deleteFile, deleteFileSync, renameSync, isFile } from "./file";
+import { getAllDirs, getAllDirsSync, getFilePath, getDirs, getDirsSync, exists, existsSync, mkdirs, mkdirsSync, rmdir, rmdirSync, mkdir, mkdirSync, copySync, copy, isDirectory } from "./path";
 
 export {
   readFileUtf8,
@@ -24,5 +24,7 @@ export {
   mkdirSync,
   saveFileUtf8,
   saveFileUtf8Sync,
-  renameSync
+  renameSync,
+  copySync,
+  copy
 };

@@ -1,4 +1,5 @@
 import { readdirSync, statSync, readFileSync, writeFileSync, unlinkSync, existsSync, renameSync as fsRenameSync } from "fs";
+import { isDirectory } from "./path";
 
 /**
  * 递归指定目录下的所有子目录，找出所有文件
@@ -27,7 +28,7 @@ export function getAllFilesSync(path: string) {
   for (let file of files) {
     let fileFullName = `${path}/${file}`;
 
-    if (statSync(fileFullName).isDirectory()) {
+    if (isDirectory(fileFullName)) {
       fileList = fileList.concat(getAllFilesSync(`${fileFullName}/`));
     } else {
       fileList.push(`${fileFullName}`);
@@ -64,7 +65,7 @@ export function getFilesSync(path: string) {
   for (let file of files) {
     let fileFullName = `${path}/${file}`;
 
-    if (statSync(fileFullName).isFile()) {
+    if (isFile(fileFullName)) {
       fileList.push(`${fileFullName}`);
     }
   }
@@ -160,4 +161,15 @@ export function deleteFileSync(fileName: string) {
  */
 export function renameSync(oldName: string, newName: string) {
   fsRenameSync(oldName, newName);
+}
+
+/**
+ * 是否是文件
+ * 
+ * @export
+ * @param {string} fileName 
+ * @returns 
+ */
+export function isFile(fileName: string) {
+  return statSync(fileName).isFile();
 }
