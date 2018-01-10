@@ -26,5 +26,9 @@ export {
   saveFileUtf8Sync,
   renameSync,
   copySync,
-  copy
+  copy,
+  deleteFile,
+  deleteFileSync,
+  isFile,
+  isDirectory
 };
