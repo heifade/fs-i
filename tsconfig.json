@@ -5,9 +5,9 @@
     "outDir": "./es/",
     "removeComments": true,
     "types" : ["node"],
-    "module": "commonjs", // Specify module code generation: 'none', commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.
-    "target": "es6", // Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'.
-    "declaration": true
+    "module": "commonjs", //"amd", "commonjs", "es2015", "es6", "esnext", "none", "system", "umd"
+    "target": "es2017", //'es3', 'es5', 'es2015', 'es2016', 'es2017', or 'esnext'.
+    "declaration": true,
   },
   "include": ["./src/**/*"]
 }
