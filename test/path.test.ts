@@ -275,7 +275,7 @@ it("copySync with error", async () => {
     copySync(path1, path2, { overwrite: true });
     expect(true).to.be.false; // 进入这里就有问题了
   } catch (e) {
-    expect((e.message || "").endsWith(" is not exists!1")).to.be.true;
+    expect((e.message || "").endsWith(" is not exists!")).to.be.true;
   }
 });
 
