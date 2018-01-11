@@ -1,6 +1,6 @@
 {
   "name": "fs-i",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "file tools",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -8,26 +8,14 @@
   "files": [
     "es"
   ],
-  "scripts": {
-    "clean": "node ./tools/clean.js",
-    "code-build": "tsc -p tsconfig.json",
-    "docs": "typedoc --out docs src --module commonjs --hideGenerator && node ./tools/formatDocs.js",
-    "build": "npm run clean && npm run code-build && npm run docs",
-    "test": "nyc mocha -t 5000",
-    "test-nyc": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heifade/fs-i.git"
   },
-  "nyc": {
-    "include": [
-      "src/**/*.ts"
-    ],
-    "extension": [
-      ".ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ],
-    "sourceMap": true,
-    "instrument": true
+  "scripts": {
+    "build": "pcreate build",
+    "start": "pcreate build && node ./es/index.js",
+    "test": "pcreate test"
   },
   "keywords": [],
   "author": "",
@@ -36,14 +24,8 @@
     "@types/chai": "^4.0.6",
     "@types/mocha": "^2.2.44",
     "chai": "^4.1.2",
-    "coveralls": "^3.0.0",
     "mocha": "^4.0.1",
-    "nyc": "^11.3.0",
-    "source-map-support": "^0.5.0",
-    "ts-node": "^4.1.0",
-    "typedoc": "^0.9.0",
-    "typedoc-format": "^1.0.2",
-    "typescript": "^2.5.3"
+    "pcreate-config": "^1.0.11"
   },
   "dependencies": {}
 }
