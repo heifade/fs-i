@@ -3,10 +3,9 @@ sudo: enabled
 node_js:
   - "8"
 before_script:
-  - npm i pcreate
-  - pcreate test -c
+  - happywork-node-builder test --coveralls
 script:
-  - pcreate build
+  - npm run build
 after_script:
 
 cache:
