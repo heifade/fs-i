@@ -1,7 +1,9 @@
 import { BuildConfig } from "happywork-node-builder";
 
 const config: BuildConfig = {
-  input: "src/index.ts",
+  input: {
+    index: "src/index.ts"
+  },
   output: [
     {
       dir: "es",

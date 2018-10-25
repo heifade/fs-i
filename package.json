@@ -1,20 +1,21 @@
 {
   "name": "fs-i",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "file tools",
   "main": "./lib/index.js",
   "module": "./es/index.js",
-  "typings": "./es/index",
+  "typings": "./ts/index.d.ts",
   "files": [
     "es",
-    "lib"
+    "lib",
+    "ts"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/heifade/fs-i.git"
   },
   "scripts": {
-    "build": "happywork-node-builder build --doc",
+    "build": "happywork-node-builder build --doc && tsc",
     "test": "happywork-node-builder test"
   },
   "keywords": [],
@@ -24,8 +25,9 @@
     "@types/chai": "^4.1.0",
     "@types/mocha": "^2.2.46",
     "chai": "^4.1.2",
-    "happywork-node-builder": "^1.0.45",
-    "mocha": "^4.1.0"
+    "happywork-node-builder": "^1.0.51",
+    "mocha": "^4.1.0",
+    "typescript": "^3.1.3"
   },
   "dependencies": {}
 }
